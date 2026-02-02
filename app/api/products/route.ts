@@ -18,10 +18,10 @@ export async function GET(req: Request) {
       ...(q
         ? {
             OR: [
-              { name: { contains: q, mode: "insensitive" } },
-              { description: { contains: q, mode: "insensitive" } },
-              { benefits: { contains: q, mode: "insensitive" } },
-              { howToUse: { contains: q, mode: "insensitive" } },
+              { name: { contains: q } },
+              { description: { contains: q } },
+              { benefits: { contains: q } },
+              { howToUse: { contains: q } },
             ],
           }
         : {}),
