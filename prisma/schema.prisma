@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  brand       String   @default("Natura")
+  category    String
+  description String
+  benefits    String
+  howToUse    String
+  size        String
+  price       Int      // centavos MXN (19900 = $199.00)
+  stock       Int      @default(0)
+  minStock    Int      @default(3)
+  isActive    Boolean  @default(true)
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  movements   Movement[]
+}
+
+model Movement {
+  id        String   @id @default(cuid())
+  productId String
+  type      String   // IN | OUT | ADJUST
+  qty       Int
+  note      String?
+  createdAt DateTime @default(now())
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+model SiteSetting {
+  id                  String   @id @default("main")
+  catalogHeroImageUrl  String?
+  catalogHeroTitle     String   @default("Catálogo Natura by Marce")
+  catalogHeroSubtitle  String   @default("Elige, revisa disponibilidad y pide por WhatsApp.")
+  updatedAt            DateTime @updatedAt
+}
+model Promo {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
