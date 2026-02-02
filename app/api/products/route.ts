@@ -8,7 +8,6 @@ export async function GET(req: Request) {
   const category = (url.searchParams.get("category") || "").trim();
   const onlyInStock = url.searchParams.get("inStock") === "1";
 
-  // Si viene all=1 y es admin, mostramos todo (incluye inactivos)
   const wantsAll = url.searchParams.get("all") === "1";
   const admin = wantsAll ? await isAdminRequest() : false;
 
@@ -36,7 +35,9 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const admin = await isAdminRequest();
-  if (!admin) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!admin) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
 
   const body = await req.json();
 
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
       stock: Number(body.stock ?? 0),
       minStock: Number(body.minStock ?? 3),
       isActive: body.isActive ?? true,
-      imageUrl: body.imageUrl ?? null, // aquí guardamos URL o Base64
+      imageUrl: body.imageUrl ?? null,
     },
   });
 
