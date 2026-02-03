@@ -16,9 +16,9 @@ async function main() {
         name: "Crema corporal hidratante",
         category: "Cuerpo",
         description: "Hidratación diaria con sensación ligera.",
-        benefits: "• Suaviza
+        benefits: `• Suaviza
 • Hidrata
-• Aroma agradable",
+• Aroma agradable`,
         howToUse: "Aplicar sobre piel limpia, masajeando hasta absorber.",
         size: "200 ml",
         price: 19900,
@@ -32,9 +32,9 @@ async function main() {
         name: "Shampoo nutritivo",
         category: "Cabello",
         description: "Limpieza suave para uso diario.",
-        benefits: "• Brillo
+        benefits: `• Brillo
 • Suavidad
-• Nutrición",
+• Nutrición`,
         howToUse: "Aplicar, masajear y enjuagar. Repetir si es necesario.",
         size: "300 ml",
         price: 17900,
@@ -48,8 +48,8 @@ async function main() {
         name: "Fragancia fresca",
         category: "Fragancias",
         description: "Aroma fresco para el día a día.",
-        benefits: "• Larga duración
-• Ideal diario",
+        benefits: `• Larga duración
+• Ideal diario`,
         howToUse: "Rociar a 15 cm en puntos de pulso.",
         size: "100 ml",
         price: 49900,
@@ -57,7 +57,7 @@ async function main() {
         minStock: 2,
         isActive: true,
         imageUrl: null,
-      }
+      },
     ],
   });
 
