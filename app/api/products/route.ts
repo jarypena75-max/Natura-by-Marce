@@ -14,16 +14,7 @@ export async function GET(req: Request) {
   const products = await prisma.product.findMany({
     where: {
       ...(admin ? {} : { isActive: true }),
-      ...(q
-        ? {
-            OR: [
-              { name: { contains: q } },
-              { description: { contains: q } },
-              { benefits: { contains: q } },
-              { howToUse: { contains: q } },
-            ],
-          }
-        : {}),
+      ...(q ? { name: { contains: q } } : {}),
       ...(category ? { category } : {}),
       ...(onlyInStock ? { stock: { gt: 0 } } : {}),
     },
