@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAdminRequest } from "@/lib/auth";
 
+// ✅ Evita que Next intente “precalcular” esto en build (Vercel)
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const q = (url.searchParams.get("q") || "").trim();
@@ -9,7 +13,16 @@ export async function GET(req: Request) {
   const onlyInStock = url.searchParams.get("inStock") === "1";
 
   const wantsAll = url.searchParams.get("all") === "1";
-  const admin = wantsAll ? await isAdminRequest() : false;
+
+  // ✅ Solo intentamos auth si de verdad piden all=1, y con guardas
+  let admin = false;
+  if (wantsAll) {
+    try {
+      admin = await isAdminRequest();
+    } catch {
+      admin = false;
+    }
+  }
 
   const products = await prisma.product.findMany({
     where: {
@@ -25,7 +38,13 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const admin = await isAdminRequest();
+  let admin = false;
+  try {
+    admin = await isAdminRequest();
+  } catch {
+    admin = false;
+  }
+
   if (!admin) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
