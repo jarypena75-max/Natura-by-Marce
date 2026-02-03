@@ -2,19 +2,18 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAdminRequest } from "@/lib/auth";
 
-// ✅ Evita que Next intente “precalcular” esto en build (Vercel)
+// 🔒 OBLIGATORIO para Vercel
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
+
   const q = (url.searchParams.get("q") || "").trim();
   const category = (url.searchParams.get("category") || "").trim();
   const onlyInStock = url.searchParams.get("inStock") === "1";
-
   const wantsAll = url.searchParams.get("all") === "1";
 
-  // ✅ Solo intentamos auth si de verdad piden all=1, y con guardas
   let admin = false;
   if (wantsAll) {
     try {
